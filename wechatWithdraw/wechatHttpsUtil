@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.xindai.utils.XMLUtils;
 
 /**
- * https请求（带证书验证）
+ * https请求（带证书验证,未完善）
  * @author raohui
  *
  */
@@ -51,11 +51,11 @@ public class wechatHttpsUtil {
 
 		SSLContext sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, key.toCharArray()).build();
 		SSLConnectionSocketFactory sslf = new SSLConnectionSocketFactory(sslContext, new String[] { "TLSv1" }, null,
-				new HostnameVerifier() {
+				new HostnameVerifier() { //此处需要重新设计，默认实现的方法时不安全的
 					@Override
 					public boolean verify(String hostname, SSLSession session) {
 						// TODO Auto-generated method stub
-						return false;
+						return false; 
 					}
 				});
 		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslf).build();
