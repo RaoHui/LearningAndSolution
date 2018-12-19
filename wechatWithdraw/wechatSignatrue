@@ -1,0 +1,32 @@
+package com.xindai.impl.wechat.utils;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+
+import com.xindai.utils.redis.MD5Utils;
+
+/**
+ * 数据签名在进行MD5加密
+ * @author raohui
+ *
+ */
+public class wechatSignatrueUtil {
+
+	public static String wechatSginatrueToMD5(Map<String, String> data, String key) {
+		Set<String> set = data.keySet();
+		String[] array = set.toArray(new String [set.size()]);
+		Arrays.sort(array);
+		StringBuffer sb = new StringBuffer();
+		for (String k : array) {
+			if (k.equals("sign")) { //sign不参与签名
+				continue;
+			}
+			if (data.get(k).trim().length() > 0) { //参数值为空不参与签名
+				sb.append(k).append("=").append(data.get(k).trim()).append("&");
+			}
+		}
+		sb.append("key=").append(key);
+		return MD5Utils.md5(sb.toString()).toUpperCase();
+	}
+}
