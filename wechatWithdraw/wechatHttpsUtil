@@ -1,0 +1,80 @@
+package com.xindai.impl.wechat.utils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.KeyStore;
+import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.xindai.utils.XMLUtils;
+
+/**
+ * https请求（带证书验证）
+ * @author raohui
+ *
+ */
+public class wechatHttpsUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(wechatHttpsUtil.class);
+
+	public static Map<String, String> wechatPostToXml(String mchId, String url, String xmlData, String certificatePath)
+			throws Exception {
+		// 证书密码
+		String key = mchId;
+		// 证书路径
+		String path = certificatePath;
+		// 指定读取证书格式为PKCS12
+		KeyStore keyStore = KeyStore.getInstance("PKCS12");
+		// 读取本机存放的PKCS12的证书文件
+		FileInputStream instream = new FileInputStream(new File(path));
+		try {
+			keyStore.load(instream, key.toCharArray());
+		} finally {
+			instream.close();
+		}
+
+		SSLContext sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, key.toCharArray()).build();
+		SSLConnectionSocketFactory sslf = new SSLConnectionSocketFactory(sslContext, new String[] { "TLSv1" }, null,
+				new HostnameVerifier() {
+					@Override
+					public boolean verify(String hostname, SSLSession session) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+				});
+		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslf).build();
+		HttpPost post = new HttpPost(url);
+		StringEntity stringEntity = new StringEntity(xmlData, "UTF-8");
+		post.addHeader("Content-Type", "text/xml");
+		post.setEntity(stringEntity);
+		CloseableHttpResponse httpResponse = httpClient.execute(post);
+		Map<String, String> result = null;
+		try {
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				HttpEntity entity = httpResponse.getEntity();
+				result = XMLUtils.xmlToMap(EntityUtils.toString(entity, "UTF-8"));
+				EntityUtils.consume(entity);
+			}
+		} catch (Exception e) {
+			log.error("请求错误,错误信息:" + e.toString());
+			System.out.println("请求错误,错误信息:" + e.toString());
+		}
+		return result;
+	}
+}
