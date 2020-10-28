@@ -1,0 +1,7 @@
+server:
+  port: 9001
+
+#打开熔断代理访问
+hystrix:
+  dashboard:
+    proxy-stream-allow-list: "*"

@@ -1,0 +1,19 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: spring-cloud-zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://server1:7001/eureka/,http://server2:7002/eureka/
+  instance:
+    instance-id: zuul9527.com
+
+zuul:
+  routes:
+    mydept.serviceId: spring-cloud-provider-hystrix
+    mydept.path: /mydept/**
+  ignored-services: spring-cloud-provider-hystrix

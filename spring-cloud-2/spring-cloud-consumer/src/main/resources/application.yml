@@ -1,0 +1,12 @@
+server:
+  port: 80
+
+
+eureka:
+  client:
+    service-url: #监控页面地址
+      defaultZone: http://server1:7001/eureka/,http://server2:7002/eureka/
+
+spring:
+  application:
+    name: spring-cloud-consumer-dept

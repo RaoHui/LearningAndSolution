@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="spring-cloud-consumer" />
+        <module name="spring-cloud-conusmer-hystrix-dashboard" />
+        <module name="spring-boot-cloud-provider-hystrix" />
+        <module name="spring-cloud-zuul" />
+        <module name="spring-cloud-eureka" />
+        <module name="spring-cloud-api" />
+        <module name="spring-cloud-provider-dept" />
+        <module name="spring-cloud-erueka2" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
