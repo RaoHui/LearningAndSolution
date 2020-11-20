@@ -7,6 +7,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+* 生产者回调确认
+**/
 @Configuration
 public class RabbitConfig {
 
