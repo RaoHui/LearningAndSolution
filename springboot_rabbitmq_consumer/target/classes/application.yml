@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: springboot_rabbitmq_consumer
+  rabbitmq:
+    host: 192.168.243.128
+    username: guest
+    password: guest
+    port: 5672
+    #设置手动确认Ack
+    listener:
+      simple:
+        acknowledge-mode: manual #设置手动
+        concurrency: 1 #消费最小数量
+        max-concurrency: 10 #消费最大数量
+
+
+
+server:
+  port: 8081

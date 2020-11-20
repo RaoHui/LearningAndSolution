@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: springboot_rabbitmq_provider
+  rabbitmq:
+    host: 192.168.243.128
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated
+    publisher-returns: true
